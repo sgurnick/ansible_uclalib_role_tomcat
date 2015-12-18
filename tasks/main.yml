@@ -9,7 +9,7 @@
   file: src=/usr/local/apache-tomcat-{{ tomcat_version }} dest=/usr/local/tomcat{{ tomcat_major_version }} state=link
 
 - name: Create dedicated user accounts for each Tomcat application
-  user: name={{ item.app_name }} comment="{{ item }} User" shell=/bin/bash home=/usr/local/{{ item }}
+  user: name={{ item }} comment="{{ item }} User" shell=/bin/bash home=/usr/local/{{ item }}
   with_items: app_name
 
 - name: Create the CATALINA_BASE paths for each Tomcat application and set ownership
