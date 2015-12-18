@@ -30,7 +30,7 @@
   copy: src=tomcat_init dest=/etc/init.d/tomcat mode=0755
 
 - name: Create init script symbolic links for each app
-  file: src=/usr/local/tomcat dest=/usr/local/{{ item }} state=link
+  file: src=/etc/init.d/tomcat dest=/etc/init.d/{{ item }} state=link
   with_items: app_name
 
 - name: Put in place the tomcat app environment variables file
