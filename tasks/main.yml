@@ -17,10 +17,10 @@
   with_items: app_name
 
 - name: Copy sub-directories from CATALINA_HOME to CATALINA_BASE
-  copy: src=/usr/local/tomcat{{ tomcat_major_version }}/{{ item[1] }}/ dest=/usr/local/{{ item[0] }}
+  command: rsync --ignore-existing -a /usr/local/tomcat{{ tomcat_major_version }}/{{ item[1] }} /usr/local/{{ item[0] }}
   with_nested:
-     - app_name
-     - tomcat_subdirs
+    - app_name
+    - tomcat_subdirs
 
 - name: Create empty lib directory in CATALINA_BASE to store applicaiton specific libraries
   file: path=/usr/local/{{ item }}/lib owner={{ item }} group={{ item }} state=directory
