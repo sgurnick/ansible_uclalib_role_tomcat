@@ -1,43 +1,42 @@
 ---
-
 - name: Download Tomcat into /usr/local directory
-	get_url: url=http://archive.apache.org/dist/tomcat/tomcat-{{ tomcat_major_version }}/v{{ tomcat_version }}/bin/apache-tomcat-{{ tomcat_version }}.zip dest=/usr/local/apache-tomcat-{{ tomcat_version }}.zip
+  get_url: url=http://archive.apache.org/dist/tomcat/tomcat-{{ tomcat_major_version }}/v{{ tomcat_version }}/bin/apache-tomcat-{{ tomcat_version }}.zip dest=/usr/local/apache-tomcat-{{ tomcat_version }}.zip
 
 - name: Unpack Tomcat Download
-	unarchive: src=/usr/local/apache-tomcat-{{ tomcat_version }}.zip dest=/usr/local copy=no
+  unarchive: src=/usr/local/apache-tomcat-{{ tomcat_version }}.zip dest=/usr/local copy=no
 
 - name: Create symbolic link for the CATALINA_HOME directory
-	file: src=/usr/local/apache-tomcat-{{ tomcat_version }} dest=/usr/local/tomcat{{ tomcat_major_version }} state=link
+  file: src=/usr/local/apache-tomcat-{{ tomcat_version }} dest=/usr/local/tomcat{{ tomcat_major_version }} state=link
 
 - name: Create dedicated user accounts for each Tomcat application
-	user: name={{ item.app_name }} comment="{{ item.app_name }} User" shell=/bin/bash home=/usr/local/{{ item.app_name }}
-	with_items: tomcat_app
+  user: name={{ item.app_name }} comment="{{ item }} User" shell=/bin/bash home=/usr/local/{{ item }}
+  with_items: app_name
 
 - name: Create the CATALINA_BASE paths for each Tomcat application and set ownership
-	file: path=/usr/local/{{ item.app_name }} owner={{ item.app_name }} group={{ item.app_name }} state=directory
-	with_items: tomcat_app
+  file: path=/usr/local/{{ item }} owner={{ item }} group={{ item }} state=directory
+  with_items: app_name
 
 - name: Copy sub-directories from CATALINA_HOME to CATALINA_BASE
-	copy: src=/usr/local/tomcat{{ tomcat_major_version }}/{{ item[1] }}/ dest=/usr/local/{{ item[0][app_name] }}
-	with_nested:
-		- tomcat_app
-		- tomcat_subdirs
+  copy: src=/usr/local/tomcat{{ tomcat_major_version }}/{{ item[1] }}/ dest=/usr/local/{{ item[0] }}
+  with_nested:
+     - app_name
+     - tomcat_subdirs
 
 - name: Create empty lib directory in CATALINA_BASE to store applicaiton specific libraries
-	file: path=/usr/local/{{ item.app_name }}/lib owner={{ item.app_name }} group={{ item.app_name }} state=directory
-	with_items: tomcat_app
+  file: path=/usr/local/{{ item }}/lib owner={{ item }} group={{ item }} state=directory
+  with_items: app_name
 
 - name: Put in place the tomcat init script
-	copy: src=tomcat_init dest=/etc/init.d/tomcat mode=0755
+  copy: src=tomcat_init dest=/etc/init.d/tomcat mode=0755
 
 - name: Create init script symbolic links for each app
-	file: src=/usr/local/tomcat dest=/usr/local/{{ item.app_name }} state=link
-	with_items: tomcat_app
+  file: src=/usr/local/tomcat dest=/usr/local/{{ item }} state=link
+  with_items: app_name
 
 - name: Put in place the tomcat app environment variables file
-	template: src=tomcat_env.j2 dest=/etc/sysconfig/{{ item.app_name }}
-	with_items: tomcat_app
+  template: src=tomcat_env.j2 dest=/etc/sysconfig/{{ item }}
+  with_items: app_name
 
 - name: Put in place the tomcat app server.xml file
-	template: src=tomcat_server_xml.j2 dest=/usr/local/{{ item.app_name }}/conf/server.xml owner={{ item.app_name }} group={{ item.app_name }}
-	with_items: tomcat_app
+  template: src=tomcat_server_xml.j2 dest=/usr/local/{{ item }}/conf/server.xml owner={{ item }} group={{ item }}
+  with_items: app_name

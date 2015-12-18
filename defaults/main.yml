@@ -1,5 +1,4 @@
 ---
-
 # Define the major version of Apache Tomcat to download (e.g. 6, 7, 8)
 tomcat_major_version: 7
 
@@ -22,9 +21,11 @@ tomcat_version: 7.0.67
 #	shut_port is the Tomcat applicaiton's shutdown port
 #	conn_port is the Tomcat application's connector port
 #
-tomcat_app:
-	- { app_name: "tomcatapp1", shut_port: "8006", conn_port: "8081"}
-	- { app_name: "tomcatapp2", shut_port: "8007", conn_port: "8082"}
+#
+app_name: []
 
-tomcat_subdirs: 
-	- [ conf, logs, temp, webapps, work ]
+shut_port: []
+
+conn_port: []
+
+tomcat_subdirs: [ conf, logs, temp, webapps, work ]

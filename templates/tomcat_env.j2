@@ -1,8 +1,8 @@
 ## Tomcat Environment Variables ##
 
-{% for app in tomcat_apps %}
+{% for app in app_name %}
 # User account that will run the Tomcat server process
-TOMCAT_USER={{ app.app_name }}
+TOMCAT_USER={{ app }}
 
 # Base directory of Java installation to be used with this Tomcat instance
 export JAVA_HOME=/usr/lib/jvm/java
@@ -14,11 +14,11 @@ export JAVA_HOME=/usr/lib/jvm/java
 export CATALINA_HOME=/usr/local/tomcat7
 
 # Path to this Tomcat instance
-export CATALINA_BASE=/usr/local/{{ app.app_name }}
+export CATALINA_BASE=/usr/local/{{ app }}
 
 # Set the location of the Catalina PID file
 export CATALINA_PID=$CATALINA_BASE/work/catalina.pid
 
 # Set the location of the Tomcat process lock file
-LOCKFILE=/var/lock/subsys/{{ app.app_name }}
+LOCKFILE=/var/lock/subsys/{{ app }}
 {% endfor %}
