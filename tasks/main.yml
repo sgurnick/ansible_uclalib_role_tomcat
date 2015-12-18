@@ -19,7 +19,7 @@
 - name: Copy sub-directories from CATALINA_HOME to CATALINA_BASE
   command: rsync --ignore-existing -a /usr/local/tomcat{{ tomcat_major_version }}/{{ item[1] }} /usr/local/{{ item[0][app_name] }}
   with_nested:
-    - app_name
+    - "{{ tomcat_applications }}"
     - tomcat_subdirs
 
 - name: Create empty lib directory in CATALINA_BASE to store applicaiton specific libraries
