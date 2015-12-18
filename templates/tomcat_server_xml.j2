@@ -20,7 +20,7 @@
      Documentation at /docs/config/server.html
  -->
 
-<Server port="{{ shut_port }}" shutdown="SHUTDOWN">
+<Server port="{{ item.shut_port }}" shutdown="SHUTDOWN">
   <Listener className="org.apache.catalina.startup.VersionLoggerListener" />
   <!-- Security listener. Documentation at /docs/config/listeners.html
   <Listener className="org.apache.catalina.security.SecurityListener" />
@@ -69,7 +69,7 @@
          APR (HTTP/AJP) Connector: /docs/apr.html
          Define a non-SSL HTTP/1.1 Connector on port 8080
     -->
-    <Connector port="{{ conn_port }}" protocol="HTTP/1.1"
+    <Connector port="{{ item.conn_port }}" protocol="HTTP/1.1"
                connectionTimeout="20000"
                redirectPort="8443" />
     <!-- A "Connector" using the shared thread pool-->

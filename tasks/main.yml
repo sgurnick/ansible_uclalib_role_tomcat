@@ -9,34 +9,34 @@
   file: src=/usr/local/apache-tomcat-{{ tomcat_version }} dest=/usr/local/tomcat{{ tomcat_major_version }} state=link
 
 - name: Create dedicated user accounts for each Tomcat application
-  user: name={{ item }} comment="{{ item }} User" shell=/bin/bash home=/usr/local/{{ item }}
-  with_items: app_name
+  user: name={{ item.app_name }} comment="{{ item.app_name }} User" shell=/bin/bash home=/usr/local/{{ item.app_name }}
+  with_items: "{{ tomcat_applications }}"
 
 - name: Create the CATALINA_BASE paths for each Tomcat application and set ownership
-  file: path=/usr/local/{{ item }} owner={{ item }} group={{ item }} state=directory
-  with_items: app_name
+  file: path=/usr/local/{{ item.app_name }} owner={{ item.app_name }} group={{ item.app_name }} state=directory
+  with_items: "{{ tomcat_applications }}"
 
 - name: Copy sub-directories from CATALINA_HOME to CATALINA_BASE
-  command: rsync --ignore-existing -a /usr/local/tomcat{{ tomcat_major_version }}/{{ item[1] }} /usr/local/{{ item[0] }}
+  command: rsync --ignore-existing -a /usr/local/tomcat{{ tomcat_major_version }}/{{ item[1] }} /usr/local/{{ item[0][app_name] }}
   with_nested:
     - app_name
     - tomcat_subdirs
 
 - name: Create empty lib directory in CATALINA_BASE to store applicaiton specific libraries
-  file: path=/usr/local/{{ item }}/lib owner={{ item }} group={{ item }} state=directory
-  with_items: app_name
+  file: path=/usr/local/{{ item.app_name }}/lib owner={{ item.app_name }} group={{ item.app_name }} state=directory
+  with_items: "{{ tomcat_applications }}"
 
 - name: Put in place the tomcat init script
   copy: src=tomcat_init dest=/etc/init.d/tomcat mode=0755
 
 - name: Create init script symbolic links for each app
-  file: src=/etc/init.d/tomcat dest=/etc/init.d/{{ item }} state=link
-  with_items: app_name
+  file: src=/etc/init.d/tomcat dest=/etc/init.d/{{ item.app_name }} state=link
+  with_items: "{{ tomcat_applications }}"
 
 - name: Put in place the tomcat app environment variables file
-  template: src=tomcat_env.j2 dest=/etc/sysconfig/{{ item }}
-  with_items: app_name
+  template: src=tomcat_env.j2 dest=/etc/sysconfig/{{ item.app_name }}
+  with_items: "{{ tomcat_applications }}"
 
 - name: Put in place the tomcat app server.xml file
-  template: src=tomcat_server_xml.j2 dest=/usr/local/{{ item }}/conf/server.xml owner={{ item }} group={{ item }}
-  with_items: app_name
+  template: src=tomcat_server_xml.j2 dest=/usr/local/{{ item.app_name }}/conf/server.xml owner={{ item.app_name }} group={{ item.app_name }}
+  with_items: "{{ tomcat_applications }}"

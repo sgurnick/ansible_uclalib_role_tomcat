@@ -23,8 +23,10 @@ tomcat_version: 7.0.67
 # shut_port is the Tomcat applicaiton's shutdown port
 # conn_port is the Tomcat application's connector port
 
-app_name: [ app1, app2 ]
-
-shut_port: [ 8006, 8007 ]
-
-conn_port: [ 8081, 8082 ]
+tomcat_applications:
+  - app_name: app1
+    shut_port: 8006
+    conn_port: 8081
+  - app_name: app2
+    shut_port: 8007
+    conn_port: 8082
