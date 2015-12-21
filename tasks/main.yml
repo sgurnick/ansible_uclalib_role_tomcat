@@ -17,7 +17,7 @@
   with_items: "{{ tomcat_applications }}"
 
 - name: Copy sub-directories from CATALINA_HOME to CATALINA_BASE
-  command: rsync --ignore-existing -a /usr/local/tomcat{{ tomcat_major_version }}/{{ item[1] }} /usr/local/{{ item[0][app_name] }}
+  command: rsync --ignore-existing -a /usr/local/tomcat{{ tomcat_major_version }}/{{ item[1] }} /usr/local/{{ item[0].app_name }}
   with_nested:
     - "{{ tomcat_applications }}"
     - tomcat_subdirs
