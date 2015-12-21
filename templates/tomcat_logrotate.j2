@@ -1,0 +1,12 @@
+{% for app in tomcat_applications %}
+/usr/local/{{ app.app_name }}/logs/catalina.out
+{% endfor %}
+{
+        copytruncate
+        dateext
+        daily
+        rotate 6
+        compress
+        delaycompress
+        missingok
+}

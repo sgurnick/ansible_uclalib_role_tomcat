@@ -40,3 +40,6 @@
 - name: Put in place the tomcat app server.xml file
   template: src=tomcat_server_xml.j2 dest=/usr/local/{{ item.app_name }}/conf/server.xml owner={{ item.app_name }} group={{ item.app_name }}
   with_items: "{{ tomcat_applications }}"
+
+- name: Put in place the tomcat logroate configuration file
+  template: src=tomcat_logrotate.j2 dest=/etc/logrotate.d/tomcat
