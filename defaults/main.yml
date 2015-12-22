@@ -22,10 +22,10 @@ tomcat_version: 7.0.67
 #	conn_port is the Tomcat application's connector port
 #
 #
-app_name: []
+tomcat_applicaitons: []
 
-shut_port: []
-
-conn_port: []
-
+# Tomcat conf sub-directories that should be copied from CATALINA_HOME to CATALINA_BASE
 tomcat_subdirs: [ conf, logs, temp, webapps, work ]
+
+# Tomcat default webapps that should be removed
+default_webapps: [ docs, examples, host-manager, manager, ROOT ]

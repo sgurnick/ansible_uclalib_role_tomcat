@@ -26,6 +26,12 @@
   file: path=/usr/local/{{ item.app_name }}/lib owner={{ item.app_name }} group={{ item.app_name }} state=directory
   with_items: "{{ tomcat_applications }}"
 
+- name: Remove default Tomcat applications from the webapps subdir
+  file: path=/usr/local/{{ item[0].app_name }}/{{ item[1] }} state=absent
+  with_nested:
+    - "{{ tomcat_applications }}"
+    - default_webapps
+
 - name: Put in place the tomcat init script
   copy: src=tomcat_init dest=/etc/init.d/tomcat mode=0755
 
