@@ -27,7 +27,7 @@
   with_items: "{{ tomcat_applications }}"
 
 - name: Remove default Tomcat applications from the webapps subdir
-  file: path=/usr/local/{{ item[0].app_name }}/{{ item[1] }} state=absent
+  file: path=/usr/local/{{ item[0].app_name }}/webapps/{{ item[1] }} state=absent
   with_nested:
     - "{{ tomcat_applications }}"
     - default_webapps
