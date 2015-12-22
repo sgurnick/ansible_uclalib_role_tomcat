@@ -50,5 +50,8 @@
 - name: Put in place the tomcat logroate configuration file
   template: src=tomcat_logrotate.j2 dest=/etc/logrotate.d/tomcat
 
+- name: Ensure log path exists for the Apache HTTPD reverse proxy
+  file: path=/var/log/httpd/tomcatapps mode=0755 state=directory
+
 - name: Put in place the Apache HTTPD reverse proxy vhost configs for each tomcat app
   template: src=tomcat_revproxy_vhost.j2 dest=/etc/httpd/vhost/tomcatapps.httpd.conf

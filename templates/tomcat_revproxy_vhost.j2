@@ -1,8 +1,8 @@
 <VirtualHost *:80>
   ServerName {{ tomcat_server_name }}
 
-  ErrorLog /var/log/httpd/{{ app.app_name }}/error_log
-  CustomLog /var/log/httpd/{{ app.app_name }}/access_log combined
+  ErrorLog /var/log/httpd/tomcatapps/error_log
+  CustomLog /var/log/httpd/tomcatapps/access_log combined
 
   # don't loose time with IP address lookups
   HostnameLookups Off
