@@ -1,0 +1,36 @@
+<VirtualHost *:80>
+  ServerName {{ tomcat_server_name }}
+
+  ErrorLog /var/log/httpd/{{ app.app_name }}/error_log
+  CustomLog /var/log/httpd/{{ app.app_name }}/access_log combined
+
+  # don't loose time with IP address lookups
+  HostnameLookups Off
+
+  UseCanonicalName On
+
+  ProxyRequests Off
+  <Proxy *>
+    Order deny,allow
+    Allow from all
+  </Proxy>
+
+  ProxyPreserveHost On
+
+  ########################################
+  ### Proxies to Tomcat Apps ###
+
+  {% for app in tomcat_applicaitons %}
+  # {{ app.app_name }} tomcat app
+  ProxyPass /{{ app.rproxy_path }} http://localhost:{{ app.conn_port }}/{{ app.rproxy_path }}
+  ProxyPassReverse /{{ app.rproxy_path }} http://localhost:{{ app.conn_port }}/{{ app.rproxy_path }}
+  ProxyTimeout 300
+  <Location /{{ app.rproxy_path }}>
+    Order allow,deny
+    Allow from all
+  </Location>
+  {% endfor %}
+
+  ########################################
+
+</VirtualHost>

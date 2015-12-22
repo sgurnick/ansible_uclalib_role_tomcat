@@ -24,6 +24,9 @@ tomcat_version: 7.0.67
 #
 tomcat_applicaitons: []
 
+# Server name to use in the Apache HTTPD reverse proxy vhost file
+tomcat_server_name: "{{ ansible_fqdn }}"
+
 # Tomcat conf sub-directories that should be copied from CATALINA_HOME to CATALINA_BASE
 tomcat_subdirs: [ conf, logs, temp, webapps, work ]
 
