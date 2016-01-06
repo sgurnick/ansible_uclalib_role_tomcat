@@ -54,4 +54,4 @@
   file: path=/var/log/httpd/tomcatapps mode=0755 state=directory
 
 - name: Put in place the Apache HTTPD reverse proxy vhost configs for each tomcat app
-  template: src=tomcat_revproxy_vhost.j2 dest=/etc/httpd/vhost.d/tomcatapps.httpd.conf
+  template: src=tomcat_revproxy_vhost.j2 dest=/etc/httpd/vhosts.d/tomcatapps.httpd.conf
