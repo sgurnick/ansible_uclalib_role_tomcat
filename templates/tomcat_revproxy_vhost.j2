@@ -20,7 +20,7 @@
   ########################################
   ### Proxies to Tomcat Apps ###
 
-  {% for app in tomcat_applicaitons %}
+  {% for app in tomcat_applications %}
   # {{ app.app_name }} tomcat app
   ProxyPass /{{ app.rproxy_path }} http://localhost:{{ app.conn_port }}/{{ app.rproxy_path }}
   ProxyPassReverse /{{ app.rproxy_path }} http://localhost:{{ app.conn_port }}/{{ app.rproxy_path }}
