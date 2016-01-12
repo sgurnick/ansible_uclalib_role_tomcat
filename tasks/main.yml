@@ -1,12 +1,19 @@
 ---
+- name: Determine if this is a new install of tomcat
+  stat: path=/usr/local/apache-tomcat-{{ tomcat_version }}
+  register: tomcat_path
+
 - name: Download Tomcat into /usr/local directory
   get_url: url=http://archive.apache.org/dist/tomcat/tomcat-{{ tomcat_major_version }}/v{{ tomcat_version }}/bin/apache-tomcat-{{ tomcat_version }}.zip dest=/usr/local/apache-tomcat-{{ tomcat_version }}.zip
+  when: tomcat_path.stat.exists == False
 
 - name: Unpack Tomcat Download
   unarchive: src=/usr/local/apache-tomcat-{{ tomcat_version }}.zip dest=/usr/local copy=no
+  when: tomcat_path.stat.exists == False
 
 - name: Create symbolic link for the CATALINA_HOME directory
   file: src=/usr/local/apache-tomcat-{{ tomcat_version }} dest=/usr/local/tomcat{{ tomcat_major_version }} state=link
+  when: tomcat_path.stat.exists == False
 
 - name: Create dedicated user accounts for each Tomcat application
   user: name={{ item.app_name }} comment="{{ item.app_name }} User" shell=/bin/bash home=/usr/local/{{ item.app_name }}
@@ -21,6 +28,7 @@
   with_nested:
     - "{{ tomcat_applications }}"
     - tomcat_subdirs
+  when: tomcat_path.stat.exists == False
 
 - name: Create empty lib directory in CATALINA_BASE to store applicaiton specific libraries
   file: path=/usr/local/{{ item.app_name }}/lib owner={{ item.app_name }} group={{ item.app_name }} state=directory
