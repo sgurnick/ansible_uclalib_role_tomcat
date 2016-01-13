@@ -14,21 +14,18 @@ tomcat_version: 7.0.67
 # 3. Creating Init scripts
 # 4. Creating Enviornment variable files
 #
-# List elements should take on the following form:
-# app_name: [ app1, app2, app3 ]
-# shut_port: [ 8006, 8007, 8008 ]
-# conn_port: [ 8081, 8082, 8083 ]
-#
 # app_name is the Tomcat applicaiton's app_name
 # shut_port is the Tomcat applicaiton's shutdown port
 # conn_port is the Tomcat application's connector port
-
-tomcat_applications:
-  - app_name: app1
-    shut_port: 8006
-    conn_port: 8081
-    rproxy_path: path1
-  - app_name: app2
-    shut_port: 8007
-    conn_port: 8082
-    rproxy_path: path2
+#
+# Put the following variable definition in a vars file accessible to the playbook
+#
+# tomcat_applications:
+#  - app_name: app1
+#    shut_port: 8006
+#    conn_port: 8081
+#    rproxy_path: path1
+#  - app_name: app2
+#    shut_port: 8007
+#    conn_port: 8082
+#    rproxy_path: path2

@@ -14,15 +14,20 @@ tomcat_version: 7.0.67
 #	3. Init scripts
 #	4. Enviornment variable files
 #
-#	List elements should take on the following form:
-#	- { app_name: "tomcatapp", shut_port: "8006", conn_port: "8081"}
-#
 #	app_name is the Tomcat applicaiton's app_name
 #	shut_port is the Tomcat applicaiton's shutdown port
 #	conn_port is the Tomcat application's connector port
 #
-#
-tomcat_applicaitons: []
+
+tomcat_applications:
+  - app_name: app1
+    shut_port: 8006
+    conn_port: 8081
+    rproxy_path: path1
+  - app_name: app2
+    shut_port: 8007
+    conn_port: 8082
+    rproxy_path: path2
 
 # Server name to use in the Apache HTTPD reverse proxy vhost file
 tomcat_server_name: "{{ ansible_fqdn }}"
