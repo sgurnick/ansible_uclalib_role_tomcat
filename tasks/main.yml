@@ -1,5 +1,6 @@
 ---
-- name: Determine if this is a new install of tomcat
+
+- name: Determine if Tomcat needs to be downloaded/unarchived
   stat: path=/usr/local/apache-tomcat-{{ tomcat_version }}
   register: tomcat_path
 
@@ -13,7 +14,6 @@
 
 - name: Create symbolic link for the CATALINA_HOME directory
   file: src=/usr/local/apache-tomcat-{{ tomcat_version }} dest=/usr/local/tomcat{{ tomcat_major_version }} state=link
-  when: tomcat_path.stat.exists == False
 
 - name: Create dedicated user accounts for each Tomcat application
   user: name={{ item.app_name }} comment="{{ item.app_name }} User" shell=/bin/bash home=/usr/local/{{ item.app_name }}
@@ -23,12 +23,11 @@
   file: path=/usr/local/{{ item.app_name }} owner={{ item.app_name }} group={{ item.app_name }} state=directory
   with_items: "{{ tomcat_applications }}"
 
-- name: Copy sub-directories from CATALINA_HOME to CATALINA_BASE
+- name: Copy sub-directories from CATALINA_HOME to each CATALINA_BASE
   command: rsync --ignore-existing -a /usr/local/tomcat{{ tomcat_major_version }}/{{ item[1] }} /usr/local/{{ item[0].app_name }}
   with_nested:
     - "{{ tomcat_applications }}"
     - tomcat_subdirs
-  when: tomcat_path.stat.exists == False
 
 - name: Create empty lib directory in CATALINA_BASE to store applicaiton specific libraries
   file: path=/usr/local/{{ item.app_name }}/lib owner={{ item.app_name }} group={{ item.app_name }} state=directory
