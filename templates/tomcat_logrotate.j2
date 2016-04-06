@@ -1,7 +1,5 @@
 {% for app in tomcat_applications %}
-/usr/local/{{ app.app_name }}/logs/*.out
-/usr/local/{{ app.app_name }}/logs/*.log
-/usr/local/{{ app.app_name }}/logs/*.txt
+/usr/local/{{ app.app_name }}/logs/catalina.out
 {% endfor %}
 {
         copytruncate
