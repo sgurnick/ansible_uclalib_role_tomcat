@@ -13,5 +13,5 @@
 {% for app in tomcat_applications %}
             /usr/local/{{ app.app_name }}/logs -type f -name "*.????-??-??*" -mtime +30 | xargs rm -f
 {% endfor %}
-        enscript
+        endscript
 }
