@@ -27,7 +27,7 @@
   command: rsync --ignore-existing -a /usr/local/tomcat{{ tomcat_major_version }}/{{ item[1] }} /usr/local/{{ item[0].app_name }}
   with_nested:
     - "{{ tomcat_applications }}"
-    - tomcat_subdirs
+    - "{{ tomcat_subdirs }}"
 
 - name: Create empty lib directory in CATALINA_BASE to store applicaiton specific libraries
   file: path=/usr/local/{{ item.app_name }}/lib owner={{ item.app_name }} group={{ item.app_name }} state=directory
@@ -37,7 +37,7 @@
   file: path=/usr/local/{{ item[0].app_name }}/webapps/{{ item[1] }} state=absent
   with_nested:
     - "{{ tomcat_applications }}"
-    - default_webapps
+    - "{{ default_webapps }}"
 
 - name: Ensure correct file/directory ownership for each tomcat application
   file: path=/usr/local/{{ item.app_name }} owner={{ item.app_name }} group={{ item.app_name }} recurse=yes state=directory
