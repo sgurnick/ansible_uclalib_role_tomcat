@@ -19,11 +19,11 @@
   user: name={{ item.app_name }} comment="{{ item.app_name }} User" shell=/bin/bash home=/usr/local/{{ item.app_name }}
   with_items: "{{ tomcat_applications }}"
 
+- include: setup_lvm.yml
+
 - name: Create the CATALINA_BASE paths for each Tomcat application and set ownership
   file: path=/usr/local/{{ item.app_name }} owner={{ item.app_name }} group={{ item.app_name }} state=directory
   with_items: "{{ tomcat_applications }}"
-
-- include: setup_lvm.yml
 
 - name: Copy sub-directories from CATALINA_HOME to each CATALINA_BASE
   command: rsync --ignore-existing -a /usr/local/tomcat{{ tomcat_major_version }}/{{ item[1] }} /usr/local/{{ item[0].app_name }}

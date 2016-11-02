@@ -23,7 +23,7 @@
     state: present
   with_items: "{{ tomcat_applications }}"
 
-- name: Mount the LVM filesystem
+- name: Mount the LVM filesystems
   mount:
     name: /usr/local/{{ item.app_name }}
     src: {{ lvm_base_path }}-{{ item.app_name }}
