@@ -37,3 +37,10 @@ tomcat_subdirs: [ conf, logs, temp, webapps, work ]
 
 # Tomcat default webapps that should be removed
 default_webapps: [ docs, examples, host-manager, manager, ROOT ]
+
+# LVM Filesystem variables
+vg_name: vg_apps
+
+lv_size: 5G
+
+lvm_base_path: "/dev/mapper/vg_apps-"
