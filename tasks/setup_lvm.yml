@@ -32,5 +32,6 @@
   mount:
     name: "/usr/local/{{ item.app_name }}"
     src: "{{ lvm_base_path }}-lv_{{ item.app_name }}"
+    fstype: "ext4"
     state: "mounted"
   with_items: "{{ tomcat_applications }}"
