@@ -5,17 +5,22 @@
 # of LVM logical volumes in which to run the tomcat container webapps
 
 - name: Create Logical Volumes for webapps
-  lvol: vg={{ vg_name }} lv=lv_{{ item.app_name }} size={{ lv_size }}
+  lvol:
+    vg: "{{ vg_name }}"
+    lv: "lv_{{ item.app_name }}"
+    size: "{{ lv_size }}"
   with_items: "{{ tomcat_applications }}"
 
 - name: Create filesystem on the logical volumes
-  filesystem: fstype=ext4 dev={{ lvm_base_path }}-{{ item.app_name }}
+  filesystem:
+    fstype: ext4
+    dev: "{{ lvm_base_path }}-{{ item.app_name }}"
   with_items: "{{ tomcat_applications }}"
 
 - name: Update /etc/fstab with LVM mount point
   mount:
-    name: /usr/local/{{ item.app_name }}
-    src: {{ lvm_base_path }}-{{ item.app_name }}
+    name: "/usr/local/{{ item.app_name }}"
+    src: "{{ lvm_base_path }}-{{ item.app_name }}"
     fstype: ext4
     opts: defaults
     dump: 1
@@ -25,7 +30,7 @@
 
 - name: Mount the LVM filesystems
   mount:
-    name: /usr/local/{{ item.app_name }}
-    src: {{ lvm_base_path }}-{{ item.app_name }}
+    name: "/usr/local/{{ item.app_name }}"
+    src: "{{ lvm_base_path }}-{{ item.app_name }}"
     state: mounted
   with_items: "{{ tomcat_applications }}"
